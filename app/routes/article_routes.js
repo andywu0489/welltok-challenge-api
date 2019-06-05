@@ -29,7 +29,21 @@ const router = express.Router()
 
 // INDEX
 // GET /examples
-router.get('/articles', requireToken, (req, res, next) => {
+router.get('/my-articles', requireToken, (req, res, next) => {
+  Article.find({'owner': req.user.id})
+    .then(articles => {
+      // `examples` will be an array of Mongoose documents
+      // we want to convert each one to a POJO, so we use `.map` to
+      // apply `.toObject` to each one
+      return articles.map(article => article.toObject())
+    })
+    // respond with status 200 and JSON of the examples
+    .then(articles => res.status(200).json({ articles: articles }))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+})
+
+router.get('/all-articles', (req, res, next) => {
   Article.find()
     .then(articles => {
       // `examples` will be an array of Mongoose documents
