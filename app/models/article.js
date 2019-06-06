@@ -15,7 +15,6 @@ const articleSchema = new mongoose.Schema({
   },
   tags: {
     type: String
-    // required: true
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
